@@ -1,0 +1,194 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "California Real Estate Price Predictor API",
+    "description": "API for predicting real estate prices in California",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:5000",
+      "description": "Local development server"
+    }
+  ],
+  "paths": {
+    "/api/v1/cities": {
+      "get": {
+        "summary": "Get list of available cities",
+        "description": "Returns a list of all cities available for price prediction",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "cities": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "example": ["Los Angeles", "San Francisco", "San Diego"]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Internal server error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/predict": {
+      "post": {
+        "summary": "Predict house price",
+        "description": "Predicts the price of a house based on its characteristics",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["house_size", "city", "bed", "bath"],
+                "properties": {
+                  "house_size": {
+                    "type": "number",
+                    "description": "Size of the house in square feet",
+                    "example": 2000
+                  },
+                  "city": {
+                    "type": "string",
+                    "description": "City where the house is located",
+                    "example": "Los Angeles"
+                  },
+                  "bed": {
+                    "type": "integer",
+                    "description": "Number of bedrooms",
+                    "example": 3
+                  },
+                  "bath": {
+                    "type": "integer",
+                    "description": "Number of bathrooms",
+                    "example": 2
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful prediction",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "estimated_price": {
+                      "type": "number",
+                      "example": 750000.00
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Validation error"
+                    },
+                    "errors": {
+                      "type": "object",
+                      "example": {
+                        "house_size": ["Must be greater than 0"]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Rate limit exceeded"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "error"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Internal server error"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+} 
