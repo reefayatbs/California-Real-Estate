@@ -41,16 +41,6 @@ limiter = Limiter(
     default_limits=[RATE_LIMIT]
 )
 
-# Configure Swagger
-SWAGGER_URL = '/api/docs'
-API_URL = '/static/swagger.json'
-swaggerui_blueprint = get_swaggerui_blueprint(
-    SWAGGER_URL,
-    API_URL,
-    config={'app_name': "California Real Estate Price Predictor"}
-)
-app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL)
-
 # Input validation schemas
 class PredictionRequestSchema(Schema):
     house_size = fields.Float(required=True, validate=lambda x: x > 0)
